@@ -1,24 +1,59 @@
-version: "3"
-
 services:
 
-  web:
+  app:
+
     build: .
-    container_name: python-app
+
+    container_name: flask-app
+
     ports:
       - "5000:5000"
+
+
+    environment:
+
+      DB_HOST: postgres
+
+      DB_NAME: flaskdb
+
+      DB_USER: postgres
+
+      DB_PASSWORD: password
+
+
     depends_on:
       - postgres
 
 
+
   postgres:
+
     image: postgres:15
+
+
     container_name: postgres-db
 
+
     environment:
-      POSTGRES_USER: admin
+
+      POSTGRES_DB: flaskdb
+
+      POSTGRES_USER: postgres
+
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: projectdb
+
 
     ports:
+
       - "5432:5432"
+
+
+    volumes:
+
+      - postgres_data:/var/lib/postgresql/data
+
+
+
+volumes:
+
+ postgres_data:
