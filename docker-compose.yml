@@ -6,54 +6,19 @@ services:
 
     container_name: flask-app
 
+    working_dir: /app/backend  
+
     ports:
       - "5000:5000"
-
 
     environment:
 
       DB_HOST: postgres
-
       DB_NAME: flaskdb
-
       DB_USER: postgres
-
       DB_PASSWORD: password
 
+      PYTHONPATH: /app/backend  
 
     depends_on:
       - postgres
-
-
-
-  postgres:
-
-    image: postgres:15
-
-
-    container_name: postgres-db
-
-
-    environment:
-
-      POSTGRES_DB: flaskdb
-
-      POSTGRES_USER: postgres
-
-      POSTGRES_PASSWORD: password
-
-
-    ports:
-
-      - "5432:5432"
-
-
-    volumes:
-
-      - postgres_data:/var/lib/postgresql/data
-
-
-
-volumes:
-
- postgres_data:
