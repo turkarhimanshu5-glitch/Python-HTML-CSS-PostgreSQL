@@ -13,31 +13,27 @@ jobs:
 
     steps:
 
-    # Checkout Code
     - name: Checkout Code
       uses: actions/checkout@v4
 
 
-    # Setup Python
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
 
-    # Install Dependencies
     - name: Install Dependencies
       run: |
         pip install -r requirements.txt
 
 
-    # Run Tests
     - name: Run Tests
       run: |
         pytest || true
 
 
-    # Docker Login
+    # Docker Authentication
     - name: Docker Login
       uses: docker/login-action@v3
       with:
@@ -45,19 +41,16 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
 
-    # Build Docker Image
     - name: Build Docker Image
       run: |
         docker build -t ${{ secrets.DOCKER_IMAGE }} .
 
 
-    # Push Docker Image
     - name: Push Docker Image
       run: |
         docker push ${{ secrets.DOCKER_IMAGE }}
 
 
-    # Deploy to Server
     - name: Deploy to Server
       uses: appleboy/ssh-action@v1
 
@@ -72,8 +65,7 @@ jobs:
           docker-compose up -d
 
 
-    # Rollback if Deployment Failed
-    - name: Rollback on Failure
+    - name: Rollback Deployment
       if: failure()
 
       uses: appleboy/ssh-action@v1
